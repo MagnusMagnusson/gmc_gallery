@@ -11,6 +11,7 @@
   "defaultScriptType":1,
   "Folders":[
     {"$GMFolder":"","%Name":"paint","folderPath":"folders/paint.yy","name":"paint","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"scripts","folderPath":"folders/paint/scripts.yy","name":"scripts","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
   "ForcedPrefabProjectReferences":[],
   "IncludedFiles":[],
@@ -22,8 +23,10 @@
   "name":"gmc_gallery",
   "resources":[
     {"id":{"name":"o_canvas","path":"objects/o_canvas/o_canvas.yy",},},
-    {"id":{"name":"Object2","path":"objects/Object2/Object2.yy",},},
+    {"id":{"name":"o_paint","path":"objects/o_paint/o_paint.yy",},},
+    {"id":{"name":"o_pallett","path":"objects/o_pallett/o_pallett.yy",},},
     {"id":{"name":"rm_canvas","path":"rooms/rm_canvas/rm_canvas.yy",},},
+    {"id":{"name":"scr_paint","path":"scripts/scr_paint/scr_paint.yy",},},
     {"id":{"name":"s_canvas","path":"sprites/s_canvas/s_canvas.yy",},},
   ],
   "resourceType":"GMProject",
