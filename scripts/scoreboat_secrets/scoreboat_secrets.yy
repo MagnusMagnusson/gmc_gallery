@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scoreboat_secrets",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scoreboat_secrets",
+  "parent":{
+    "name":"data",
+    "path":"folders/data.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

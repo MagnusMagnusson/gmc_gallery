@@ -10,6 +10,7 @@
   },
   "defaultScriptType":1,
   "Folders":[
+    {"$GMFolder":"","%Name":"data","folderPath":"folders/data.yy","name":"data","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"loading","folderPath":"folders/loading.yy","name":"loading","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"paint","folderPath":"folders/paint.yy","name":"paint","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"fonts","folderPath":"folders/paint/fonts.yy","name":"fonts","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -29,7 +30,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.4.222",
+    "IDEVersion":"2026.0.0.16",
   },
   "name":"gmc_gallery",
   "resources":[
@@ -51,6 +52,7 @@
     {"id":{"name":"sb_encoding_helpers","path":"scripts/sb_encoding_helpers/sb_encoding_helpers.yy",},},
     {"id":{"name":"sb_macro","path":"scripts/sb_macro/sb_macro.yy",},},
     {"id":{"name":"sb_signing_helpers","path":"scripts/sb_signing_helpers/sb_signing_helpers.yy",},},
+    {"id":{"name":"scoreboat_secrets","path":"scripts/scoreboat_secrets/scoreboat_secrets.yy",},},
     {"id":{"name":"scr_canvas","path":"scripts/scr_canvas/scr_canvas.yy",},},
     {"id":{"name":"scr_image","path":"scripts/scr_image/scr_image.yy",},},
     {"id":{"name":"scr_paint","path":"scripts/scr_paint/scr_paint.yy",},},
@@ -63,6 +65,7 @@
     {"id":{"name":"scr_sb_realtime","path":"scripts/scr_sb_realtime/scr_sb_realtime.yy",},},
     {"id":{"name":"scr_sb_request","path":"scripts/scr_sb_request/scr_sb_request.yy",},},
     {"id":{"name":"scr_sb_session","path":"scripts/scr_sb_session/scr_sb_session.yy",},},
+    {"id":{"name":"scr_string_crypt","path":"scripts/scr_string_crypt/scr_string_crypt.yy",},},
     {"id":{"name":"string_sha1","path":"scripts/string_sha1/string_sha1.yy",},},
     {"id":{"name":"string_sha256","path":"scripts/string_sha256/string_sha256.yy",},},
     {"id":{"name":"string_sha512","path":"scripts/string_sha512/string_sha512.yy",},},
