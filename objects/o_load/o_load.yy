@@ -10,7 +10,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"loading",
-    "path":"folders/loading.yy",
+    "path":"folders/admission/loading.yy",
   },
   "parentObjectId":null,
   "persistent":false,
