@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_canvas",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_canvas",
+  "parent":{
+    "name":"scripts",
+    "path":"folders/paint/scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
