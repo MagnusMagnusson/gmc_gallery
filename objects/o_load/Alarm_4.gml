@@ -12,3 +12,7 @@ if (is_undefined(p)){
 	instance_create_layer(36, 277, layer_get_id("Instances"), o_signup_sheet);
 	exit;
 }
+
+speech_say("You already have a valid ticket. Enjoy the visit!");
+
+instance_create_layer(0,0,  layer_get_id("Instances"), o_logged_in);

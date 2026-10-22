@@ -45,6 +45,7 @@
     {"id":{"name":"README","path":"notes/README/README.yy",},},
     {"id":{"name":"o_canvas","path":"objects/o_canvas/o_canvas.yy",},},
     {"id":{"name":"o_load","path":"objects/o_load/o_load.yy",},},
+    {"id":{"name":"o_logged_in","path":"objects/o_logged_in/o_logged_in.yy",},},
     {"id":{"name":"o_paint","path":"objects/o_paint/o_paint.yy",},},
     {"id":{"name":"o_pallett","path":"objects/o_pallett/o_pallett.yy",},},
     {"id":{"name":"o_signup_sheet","path":"objects/o_signup_sheet/o_signup_sheet.yy",},},
