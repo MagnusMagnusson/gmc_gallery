@@ -1,7 +1,7 @@
 failed = false;
 
 onPlayerResumeFinish = method(self, function(e){
-	alarm[4] = 30;
+	alarm[4] = 60;
 });
 
 onInitSuccess = method(self, function(){

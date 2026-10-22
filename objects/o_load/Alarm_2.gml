@@ -1,1 +1,1 @@
-secondary_bubble = speech_say("Are you connected to the internet?")
+secondary_bubble = speech_say("Are you connected to the internet?", 2)

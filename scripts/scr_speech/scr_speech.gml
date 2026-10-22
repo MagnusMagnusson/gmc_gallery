@@ -23,24 +23,31 @@ global.speech_voices = [
 global.speech_slots = [
 	{ x: 870, y: 215, grow_up: true,  tail_x: 925, tail_y: 265, bubble: noone }, // top left
 	{ x: 870, y: 365, grow_up: false, tail_x: 925, tail_y: 315, bubble: noone }, // bottom left
+	{ x: 1000, y: 465, grow_up: false, tail_x: 1005, tail_y: 415, bubble: noone }, // bottom right
 ];
 
 global.speech_count = 0;
-function speech_say(_text, _hold = -1) {
+function speech_say(_text, slot = -1,  _hold = -1) {
 	var _slots = global.speech_slots;
-	var _slot = -1;
-	for (var i = 0; i < array_length(_slots); i++) {
-		if (!instance_exists(_slots[i].bubble)) {
-			_slot = i;
-			break;
+	var _slot = slot;
+	if(slot == -1){
+		for (var i = 0; i < array_length(_slots); i++) {
+			if (!instance_exists(_slots[i].bubble)) {
+				_slot = i;
+				break;
+			}
 		}
-	}
-	if (_slot == -1) {
-		_slot = 0;
-		for (var i = 1; i < array_length(_slots); i++) {
-			if (_slots[i].bubble.born < _slots[_slot].bubble.born) _slot = i;
+		if (_slot == -1) {
+			_slot = 0;
+			for (var i = 1; i < array_length(_slots); i++) {
+				if (_slots[i].bubble.born < _slots[_slot].bubble.born) _slot = i;
+			}
+			instance_destroy(_slots[_slot].bubble);
 		}
-		instance_destroy(_slots[_slot].bubble);
+	} else {
+		if instance_exists(_slots[_slot].bubble) {
+			_slots[_slot].bubble.dismiss()
+		}
 	}
 
 	var _bubble = instance_create_depth(0, 0, -1000, o_speech_bubble, {
