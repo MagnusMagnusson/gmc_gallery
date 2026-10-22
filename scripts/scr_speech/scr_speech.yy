@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_speech",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_speech",
+  "parent":{
+    "name":"speech",
+    "path":"folders/admission/speech.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

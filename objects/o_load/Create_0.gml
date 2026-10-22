@@ -1,14 +1,29 @@
-onSuccess = method(self, function(){
+failed = false;
+
+onPlayerResumeFinish = method(self, function(e){
+	alarm[4] = 30;
+});
+
+onInitSuccess = method(self, function(){
 	text = "Connected. Welcome to the gallery";
-	room_goto_next();
+	sb_player_resume(onPlayerResumeFinish, onPlayerResumeFinish);
 });
 
-onFail = method(self, function(){
+onInitFail = method(self, function(){
 	text = "Unable to connect. Try again later";
+	failed = true;
+	alarm[3] = speech_is_talking() ? 90 : 30;
+	alarm[0] = -1;
+	alarm[1] = -1;
 });
 
-text = "Connecting to the gallery...";
-var gi = string_decrypt(scoreboat_game_id, __mkscr(31, 32));
-var pf = string_decrypt(scoreboat_prefix, __mkscr(41, 32));
-var sc = string_decrypt(scoreboat_secret, __mkscr(52, 32));
-sb_init(gi, pf, sc, onSuccess, onFail);
+text = "Connecting...";
+primary_bubble = noone;
+secondary_bubble = noone;
+var gi = scoreboat_game_id;
+var pf = scoreboat_prefix;
+var sc = scoreboat_secret;
+
+sb_init(gi, pf, sc, onInitSuccess, onInitFail);
+
+alarm[0] = 30;

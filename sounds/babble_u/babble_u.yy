@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"babble_u",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":1,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":0.20278911,
+  "exportDir":"",
+  "name":"babble_u",
+  "parent":{
+    "name":"snd",
+    "path":"folders/admission/speech/snd.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"babble_u.wav",
+  "volume":1.0,
+}

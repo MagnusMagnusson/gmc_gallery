@@ -60,7 +60,7 @@ function __string_crypt_nibble(_char) {
 function __mkscr(s, n){
 	var a = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
 	var r = "";
-	for(i = 0; i < n; i++){
+	for(var i = 0; i < n; i++){
 		r += string_char_at(a, 1 + (power(s, i + 1) * (s xor n)) mod string_length(a));
 	}
 	return r;
