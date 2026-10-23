@@ -1,9 +1,14 @@
 sprite_index = painting.sprite;
-var ratio = 150 / sprite_get_width(sprite_index);
-image_xscale = ratio;
-image_yscale = ratio;
-image_alpha = random_range(-1, 0);
+var xratio = 150 / sprite_get_width(sprite_index);
+var yratio = 131 / sprite_get_height(sprite_index);
+image_xscale = xratio;
+image_yscale = yratio;
+image_alpha = cached ? 1 : random_range(-1, 0);
 alpha_rate = random_range(1/30, 1/90);
+title = painting.title;
+author = painting.author;
+label = string(@"'{0}'
+by {1}", title, author);
 /*
 { 
 	file : 

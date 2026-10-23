@@ -1,24 +1,29 @@
-var onPaintingLoad = method(self, function(painting){
-	var xx = 0;
-	var yy = 0;
+var onPaintingLoad = method(self, function(painting, cached){
+	var w = 155;
+	var h = 135 
+	var wl = (room_width - w) / w;
+	var hl = 450 / h;
+	var xx = irandom(wl) * w;
+	var yy = irandom(hl) * h;
 	var i = 100;
 	var bad = [o_painting, o_hallway];
 	while(
 			instance_position(xx, yy, bad) ||
-			instance_position(xx + 150, yy, bad) ||
-			instance_position(xx, yy + 150, bad) ||
-			instance_position(xx + 150, yy + 150, bad) ||
-			instance_position(xx + 75, yy + 75, bad)
+			instance_position(xx + w, yy, bad) ||
+			instance_position(xx, yy + h, bad) ||
+			instance_position(xx + w, yy + h, bad) ||
+			instance_position(xx + w/2, yy + h/2, bad)
 		){
-		xx = irandom(room_width);
-		yy = irandom(room_height);
+		xx = irandom(wl) * w;
+		yy = irandom(hl) * h;
 		i--;
 		if(i < 0){
 			break;
 		}
 	}
-	instance_create_depth(xx , yy, layer_get_id("Instances"), o_painting, {
+	instance_create_layer(xx, yy, "Instances", o_painting, {
 		painting: painting,
+		cached: cached,
 	})
 });
 
