@@ -3,6 +3,8 @@ function Canvas(_w, _h, _paper = c_white) constructor {
 	w = _w;
 	h = _h;
 	paper = _paper;
+	// Goes up with every change, so others can tell whether the painting changed since they last looked.
+	edits = 0;
 	surface = surface_create(w, h);
 	//In case the surface is lost. 
 	backup = buffer_create(w * h * 4, buffer_fixed, 1);
@@ -17,6 +19,7 @@ function Canvas(_w, _h, _paper = c_white) constructor {
 
 	function save() {
 		buffer_get_surface(backup, get_surface(), 0);
+		edits++;
 	}
 
 	function clear(_colour = paper) {
@@ -115,6 +118,7 @@ function Canvas(_w, _h, _paper = c_white) constructor {
 		}
 
 		buffer_set_surface(_buf, surface, 0);
+		edits++;
 	}
 
 	clear();

@@ -104,7 +104,8 @@ onSignupPressed = method(self, function(func, success, fail){
 		return;
 	}
 	alarm[0] = 150;
+	display_name = string_trim(username);
 	username = string_replace(string_trim(username)," ", "_");
 	password = string_trim(password);
-	func(username, password, {display_name:username}).success(success).fail(fail);
+	func(username, password, {display_name:display_name}).success(success).fail(fail);
 });

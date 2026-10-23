@@ -17,6 +17,7 @@ global.paint = {
 	size: 8,
 	picker_open: false, // Colour picker popup is modal: other UI and the canvas ignore the mouse
 	typing: false,      // Hex field has focus: tool shortcut keys are ignored
+	naming: false,      // Same, for the painting's title field
 };
 
 #macro HEX_DIGITS "0123456789ABCDEF"
