@@ -18,6 +18,8 @@ global.painting_listing_time = 0;
 global.painting_cache = undefined;
 // Paintings decoded this run, by file id. Their sprites belong here: don't sprite_delete them.
 global.painting_loaded = {};
+// The painting the canvas room shows instead of a blank canvas, or undefined to paint a new one.
+global.viewing_painting = undefined;
 
 function painting_encode(surface, title) {
 	var tmp = "painting_save.png";

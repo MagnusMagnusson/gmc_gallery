@@ -11,7 +11,18 @@ status_y = delete_y + button_h + 12;
 // Where Leave goes. The gallery hallway, once there is one.
 leave_to = rm_hallway;
 
-title = "";
+// Looking at someone else's painting from the gallery: its title and author instead of the
+// title field, and no saving. One's own paintings open for editing instead.
+shown = global.viewing_painting;
+mine = !is_undefined(shown) && painting_is_mine(shown);
+viewing = !is_undefined(shown) && !mine;
+if(viewing){
+	draw_set_font(fnt_speech);
+	title_h = string_height_ext(shown.title, -1, width);
+	leave_y = y + title_h + 34;
+}
+
+title = mine ? shown.title : "";
 editing = false;
 // The first step of editing claims keyboard_string back from the hex field, which may have
 // rewritten it on the same step.
@@ -23,7 +34,7 @@ leave_confirm = false;
 deleting = false;
 delete_confirm = false;
 // Set by the first save; later saves overwrite the same painting.
-saved_path = undefined;
+saved_path = mine ? shown.file.path : undefined;
 saved_edits = instance_exists(o_canvas) ? o_canvas.canvas.edits : 0;
 
 unsaved = function() {
@@ -85,4 +96,14 @@ remove = function() {
 		owner.status = "Couldn't delete: " + string(_error.message);
 	});
 	painting_delete(_job.path, _job.on_success, _job.on_fail);
+};
+
+deleteClicked = function(){
+	if(delete_confirm){
+		remove();
+	} else {
+		delete_confirm = true;
+		leave_confirm = false;
+		status = "This takes the painting out of the gallery for good. Click again to delete it.";
+	}
 };

@@ -1,3 +1,15 @@
+if(viewing){
+	draw_set_font(fnt_speech);
+	draw_set_colour(c_black);
+	draw_text_ext(x, y, shown.title, -1, width);
+	draw_set_font(fnt_paint_ui_label);
+	draw_set_colour(c_dkgray);
+	draw_text(x, y + title_h + 6, "by " + shown.author);
+	ui_button(x, leave_y, x + width, leave_y + button_h, "Leave", false);
+	draw_set_colour(c_white);
+	exit;
+}
+
 if (instance_exists(o_paint) && !o_paint.can_edit) exit;
 var _accent = make_colour_rgb(70, 110, 200);
 

@@ -1,3 +1,10 @@
+if(viewing){
+	if(mouse_check_button_pressed(mb_left) && point_in_box(mouse_x, mouse_y, x, leave_y, x + width, leave_y + button_h)){
+		room_goto(leave_to);
+	}
+	exit;
+}
+
 if (instance_exists(o_paint) && !o_paint.can_edit) exit;
 var _paint = global.paint;
 if (_paint.picker_open) exit;
@@ -30,13 +37,7 @@ if (_click && !saving && !deleting && point_in_box(mouse_x, mouse_y, x, save_y, 
 
 var _can_delete = !is_undefined(saved_path) && !saving && !deleting;
 if (_click && _can_delete && point_in_box(mouse_x, mouse_y, x, delete_y, x + width, delete_y + button_h)) {
-	if (delete_confirm) {
-		remove();
-	} else {
-		delete_confirm = true;
-		leave_confirm = false;
-		status = "This takes the painting out of the gallery for good. Click again to delete it.";
-	}
+	deleteClicked();
 }
 
 if (_click && point_in_box(mouse_x, mouse_y, x, leave_y, x + width, leave_y + button_h)) {

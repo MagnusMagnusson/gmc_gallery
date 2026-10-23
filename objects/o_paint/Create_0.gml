@@ -1,4 +1,4 @@
-can_edit = true;
+can_edit = is_undefined(global.viewing_painting) || painting_is_mine(global.viewing_painting);
 
 // Toolbox: tool buttons, brush size slider and clear. Keys select tools too.
 tools = [
