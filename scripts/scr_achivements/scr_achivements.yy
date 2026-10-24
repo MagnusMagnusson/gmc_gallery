@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_achivements",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_achivements",
+  "parent":{
+    "name":"gmc_gallery",
+    "path":"gmc_gallery.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

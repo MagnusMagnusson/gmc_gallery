@@ -27,7 +27,6 @@ if(mouse_check_button_pressed(mb_left)){
 	} else if (selected_slot == SIGNUP_SLOTS.LOGIN){
 	}
 }
-
 if(selected_slot == SIGNUP_SLOTS.USERNAME){
 	if(username != keyboard_string){
 		username = sanitize(keyboard_string);
@@ -40,7 +39,10 @@ if(selected_slot == SIGNUP_SLOTS.USERNAME){
 	}
 } else if (selected_slot == SIGNUP_SLOTS.LOGIN){
 	selected_slot = SIGNUP_SLOTS.NONE;
-	onSignupPressed(sb_player_login, onLogin, onLoginFailed);
+	// sb_player_login takes no options; its third argument is on_success
+	onSignupPressed(function(_login, _password, _options){
+		return sb_player_login(_login, _password);
+	}, onLogin, onLoginFailed);
 } else if (selected_slot == SIGNUP_SLOTS.REGISTER){	
 	selected_slot = SIGNUP_SLOTS.NONE;
 	onSignupPressed(sb_player_register, onRegister, onRegisterFailed);
