@@ -188,6 +188,22 @@ function sb_player_rename(_display_name, _on_success = undefined, _on_fail = und
 	return __sb_player_update("PATCH", "me", { display_name: _display_name }, _on_success, _on_fail);
 }
 
+/// @function sb_player_list([options], [on_success], [on_fail])
+/// @description Lists the game's players by display name. Works only when the game's player pool is set to
+///   be listable on the dashboard, and fails with HTTP 403 otherwise. 
+///   on_success(page) is called with { game, count, offset, limit,
+///   next_offset, players }, where each of players is { id, display_name }
+///   and nothing more. next_offset is not set on the last page. Banned and
+///   deleted players, and players with no display name, are left out.
+///   options is a struct, every member optional:
+///     search          Matches the start of a display name, ignoring case.
+///     limit, offset   Pagination. limit is 50 unless given and at most 200.
+///   on_fail(error) and the return value are as for sb_player_guest.
+function sb_player_list(_options = undefined, _on_success = undefined, _on_fail = undefined){
+	var _endpoint = "gm/" + __sb_url_encode(__sb_session().gid) + "/players/" + __sb_query(_options);
+	return __sb_api("GET", _endpoint, undefined, undefined, _on_success, _on_fail);
+}
+
 /// @function sb_player_password_forgot(login, [on_success], [on_fail])
 /// @description Mails a reset code to the account login names, if there is one
 ///   and it has an email address. on_success(result) is called with { sent }

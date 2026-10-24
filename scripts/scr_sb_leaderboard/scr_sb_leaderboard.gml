@@ -98,13 +98,17 @@ function sb_leaderboard_scores(_leaderboard_id, _options = undefined, _on_succes
 ///   on_success(entry) is called with the player's best entry on the board,
 ///   which need not be the one just sent:
 ///   { id, rank, player, player_name, score, secondary_score, added, updated,
-///   extra_data, improved, submitted }. improved is whether this submission is
-///   now their best. submitted is the id of the entry this call created, or
+///   extra_data, improved, submitted }. improved is whether this submission
+///   beat their best. submitted is the id of the entry this call created, or
 ///   not set when it updated or lost to an existing one.
 ///   options is a struct, every member optional:
 ///     secondary_score   Breaks ties on score.
 ///     extra_data        Anything json_stringify can handle. Stored with the
 ///                       entry. At most 1 MB.
+///     overwrite         true to replace the player's entry even when this
+///                       score is worse. Only matters on a leaderboard that
+///                       keeps one entry per player; improved still says
+///                       whether it beat the old one.
 ///   on_fail(error) is called with { stage, http_status, message }.
 ///   Returns a request handle, like sb_leaderboard_details.
 function sb_leaderboard_submit(_leaderboard_id, _player_name, _score, _options = undefined, _on_success = undefined, _on_fail = undefined){
@@ -114,6 +118,7 @@ function sb_leaderboard_submit(_leaderboard_id, _player_name, _score, _options =
 	if(is_struct(_options)){
 		if(!is_undefined(_options[$ "secondary_score"])) _body.secondary_score = __sb_decimal_string(_options.secondary_score);
 		if(!is_undefined(_options[$ "extra_data"])) _body.extra_data = _options.extra_data;
+		if(!is_undefined(_options[$ "overwrite"])) _body.overwrite = bool(_options.overwrite);
 	}
 
 	var _endpoint = "lb/" + __sb_url_encode(_leaderboard_id) + "/score/";

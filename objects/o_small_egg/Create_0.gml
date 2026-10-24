@@ -28,8 +28,7 @@ hit = function(){
 	if(stage == 0){
 		start_time = current_time;
 	} else {
-		// TODO scoreBOAT: submit stage (eggs broken, 1-3) with elapsed() as the secondary score.
-		show_debug_message("small egg: {0} eggs in {1} ms", stage, elapsed());
+		egg_submit_small(stage, elapsed());
 	}
 	stage++;
 	hits = 0;

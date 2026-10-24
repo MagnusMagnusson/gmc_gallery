@@ -4,7 +4,7 @@ for(var i = 0; i < string_length(word); i++){
 	if(i < index){
 		draw_set_colour(c_red);
 	} else {
-		draw_set_color(c_ltgray);
+		draw_set_color(c_navy);
 	}
 	var d = 8 + 20*(sin(t/3 + i) + cos(t/5 + i))
 	draw_text(

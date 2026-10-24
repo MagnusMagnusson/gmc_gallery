@@ -2,6 +2,8 @@ if(!finished()) draw_self();
 
 draw_set_font(fnt_EGG);
 draw_set_halign(fa_center);
-draw_set_colour(hover ? c_red : c_ltgray);
+draw_set_colour(hover ? c_red : c_white);
 draw_text(x + sprite_width/2, y + sprite_height, label());
 draw_set_halign(fa_left);
+
+ 
