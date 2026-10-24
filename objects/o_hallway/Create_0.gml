@@ -1,30 +1,49 @@
-var onPaintingLoad = method(self, function(painting, cached){
-	var w = 155;
-	var h = 135 
-	var wl = (room_width - w) / w;
-	var hl = 450 / h;
-	var xx = irandom(wl) * w;
-	var yy = irandom(hl) * h;
-	var i = 100;
-	var bad = [o_painting, o_hallway];
-	while(
-			instance_position(xx, yy, bad) ||
-			instance_position(xx + w, yy, bad) ||
-			instance_position(xx, yy + h, bad) ||
-			instance_position(xx + w, yy + h, bad) ||
-			instance_position(xx + w/2, yy + h/2, bad)
-		){
-		xx = irandom(wl) * w;
-		yy = irandom(hl) * h;
-		i--;
-		if(i < 0){
-			break;
-		}
-	}
-	instance_create_layer(xx, yy, "Instances", o_painting, {
+slots = hallway_slots();
+capacity = array_length(slots);
+hallway_count = 1;
+
+placePainting = method(self, function(painting, cached){
+	var spot = global.hallway_spots[$ painting.file.id];
+	if(is_undefined(spot)) return;
+	var slot = slots[spot.slot];
+	instance_create_layer(slot.x, slot.y, "Instances", o_painting, {
 		painting: painting,
 		cached: cached,
-	})
+	});
 });
 
-paintings_fetch(onPaintingLoad);
+hang = method(self, function(files){
+	hallway_count = max(1, hallway_of(array_length(files) - 1, capacity) + 1);
+	global.hallway_index = clamp(global.hallway_index, 0, hallway_count - 1);
+	var here = [];
+	for(var i = 0; i < array_length(files); i++){
+		if(hallway_of(i, capacity) == global.hallway_index) array_push(here, files[i]);
+	}
+	// Spots are handed out before anything loads, so a painting that arrives first can't take
+	// the spot of one that hung there last time.
+	hallway_place(here, global.hallway_index, capacity);
+	for(var i = 0; i < array_length(here); i++){
+		painting_get(here[i], loader.onPaintingLoad);
+	}
+	if(global.hallway_index > 0){
+		instance_create_layer(250, 690, "Instances", o_hallway_arrow, { dir: -1 });
+	}
+	if(global.hallway_index < hallway_count-1){
+		instance_create_layer(room_width - 80, 690, "Instances", o_hallway_arrow, { dir: 1 });
+	}
+});
+
+// Listings and downloads can come back after this hallway is gone, when someone has already
+// walked on or gone to look at a painting. These go through a struct rather than the
+// instance, so they can check before touching it.
+loader = { owner: id };
+loader.onPaintingLoad = method(loader, function(painting, cached){
+	if(!instance_exists(owner)) return;
+	owner.placePainting(painting, cached);
+});
+loader.onListed = method(loader, function(files){
+	if(!instance_exists(owner)) return;
+	owner.hang(files);
+});
+
+paintings_list(loader.onListed);

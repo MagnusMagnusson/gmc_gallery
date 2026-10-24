@@ -141,6 +141,13 @@ function paintings_list(onDone, onFail = undefined) {
 			nextPage();
 			return;
 		}
+		// Oldest first, so each painting keeps its place as new ones are added.
+		array_sort(files, function(a, b){
+			var ca = string(a[$ "created"] ?? "");
+			var cb = string(b[$ "created"] ?? "");
+			if(ca != cb) return ca < cb ? -1 : 1;
+			return a.path < b.path ? -1 : (a.path > b.path ? 1 : 0);
+		});
 		global.painting_listing = files;
 		global.painting_listing_time = current_time;
 		painting_cache_prune(files);

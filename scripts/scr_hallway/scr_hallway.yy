@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_hallway",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_hallway",
+  "parent":{
+    "name":"scripts",
+    "path":"folders/hallway/scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
