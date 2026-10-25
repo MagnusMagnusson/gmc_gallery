@@ -1,4 +1,6 @@
 
+#macro CANVAS_UNDO_MAX 20
+
 function Canvas(_w, _h, _paper = c_white) constructor {
 	w = _w;
 	h = _h;
@@ -8,6 +10,9 @@ function Canvas(_w, _h, _paper = c_white) constructor {
 	surface = surface_create(w, h);
 	//In case the surface is lost. 
 	backup = buffer_create(w * h * 4, buffer_fixed, 1);
+	// Copies of backup from before each change, newest last.
+	undo_stack = [];
+	redo_stack = [];
 
 	function get_surface() {
 		if (!surface_exists(surface)) {
@@ -18,7 +23,46 @@ function Canvas(_w, _h, _paper = c_white) constructor {
 	}
 
 	function save() {
+		remember();
 		buffer_get_surface(backup, get_surface(), 0);
+		edits++;
+	}
+
+	// Keeps a copy of backup, the picture as it was before the change about to be made.
+	function remember() {
+		var _copy = buffer_create(w * h * 4, buffer_fixed, 1);
+		buffer_copy(backup, 0, w * h * 4, _copy, 0);
+		array_push(undo_stack, _copy);
+		if (array_length(undo_stack) > CANVAS_UNDO_MAX) buffer_delete(array_shift(undo_stack));
+		forget_redo();
+	}
+
+	function forget_redo() {
+		array_foreach(redo_stack, function(_buf) { buffer_delete(_buf); });
+		redo_stack = [];
+	}
+
+	// For after setting up the canvas, so the blank or loaded picture can't be undone.
+	function forget_history() {
+		array_foreach(undo_stack, function(_buf) { buffer_delete(_buf); });
+		undo_stack = [];
+		forget_redo();
+	}
+
+	function undo() {
+		step_history(undo_stack, redo_stack);
+	}
+
+	function redo() {
+		step_history(redo_stack, undo_stack);
+	}
+
+	// Puts the newest picture from one stack on the canvas, and the current one on the other.
+	function step_history(_from, _to) {
+		if (array_length(_from) == 0) return;
+		array_push(_to, backup);
+		backup = array_pop(_from);
+		buffer_set_surface(backup, get_surface(), 0);
 		edits++;
 	}
 
@@ -31,6 +75,7 @@ function Canvas(_w, _h, _paper = c_white) constructor {
 
 	function free() {
 		if (surface_exists(surface)) surface_free(surface);
+		forget_history();
 		buffer_delete(backup);
 	}
 
@@ -90,6 +135,7 @@ function Canvas(_w, _h, _paper = c_white) constructor {
 		var _target = buffer_peek(_buf, (_y * w + _x) * 4, buffer_u32);
 		var _fill = colour_to_pixel(_colour);
 		if (_target == _fill) return;
+		remember();
 
 		var _stack = [_x, _y];
 		while (array_length(_stack) > 0) {
@@ -122,4 +168,5 @@ function Canvas(_w, _h, _paper = c_white) constructor {
 	}
 
 	clear();
+	forget_history();
 }

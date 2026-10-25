@@ -7,6 +7,7 @@ if(viewing){
 
 if (instance_exists(o_paint) && !o_paint.can_edit) exit;
 var _paint = global.paint;
+about.active = !_paint.picker_open;
 if (_paint.picker_open) exit;
 
 var _click = mouse_check_button_pressed(mb_left);
@@ -29,7 +30,7 @@ if (editing) {
 	focus_frame = true;
 	keyboard_string = title;
 }
-_paint.naming = editing;
+_paint.naming = editing || about.focused;
 
 if (_click && !saving && !deleting && point_in_box(mouse_x, mouse_y, x, save_y, x + width, save_y + button_h)) {
 	save();

@@ -23,7 +23,9 @@ slider_h = 20;
 // Paper row: swatch of the canvas base colour, and a button to set it to the current colour
 paper_y = slider_y + slider_h + 14;
 paper_button_x = x + button_h + gap;
+// Undo, redo and clear share the last row.
 clear_y = paper_y + button_h + gap;
+third_w = (width - gap * 2) / 3;
 dragging_size = false;
 
 function draw_toolbox(){

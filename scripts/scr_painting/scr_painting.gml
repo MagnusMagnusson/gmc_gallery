@@ -4,6 +4,7 @@
 #macro PAINTING_FOLDER "/paintings"
 #macro PAINTING_EXT ".painting"
 #macro PAINTING_TITLE_MAX 40
+#macro PAINTING_DESCRIPTION_MAX 280
 
 // Downloaded paintings are kept on disk by file id, with an index of the updated time and
 // size each was downloaded at. They are only downloaded again when the listing says otherwise.
@@ -21,7 +22,7 @@ global.painting_loaded = {};
 // The painting the canvas room shows instead of a blank canvas, or undefined to paint a new one.
 global.viewing_painting = undefined;
 
-function painting_encode(surface, title) {
+function painting_encode(surface, title, description) {
 	var tmp = "painting_save.png";
 	surface_save(surface, tmp);
 	var png = buffer_load(tmp);
@@ -30,6 +31,7 @@ function painting_encode(surface, title) {
 	var player = sb_player();
 	var header = json_stringify({
 		title: title,
+		description: description,
 		author: player.display_name,
 		author_id: player.id,
 		width: surface_get_width(surface),
@@ -45,8 +47,8 @@ function painting_encode(surface, title) {
 	return buf;
 }
 
-// Returns { title, author, author_id, width, height, sprite, file }, or undefined if the
-// buffer isn't a painting.
+// Returns { title, description, author, author_id, width, height, sprite, file }, or undefined
+// if the buffer isn't a painting. Paintings saved before descriptions get an empty one.
 function painting_decode(buf, file = undefined) {
 	buffer_seek(buf, buffer_seek_start, 0);
 	var painting;
@@ -56,6 +58,7 @@ function painting_decode(buf, file = undefined) {
 		return undefined;
 	}
 	if (!is_struct(painting)) return undefined;
+	if (!is_string(painting[$ "description"])) painting.description = "";
 
 	var start = buffer_tell(buf);
 	var png_size = buffer_get_size(buf) - start;
@@ -98,9 +101,9 @@ function painting_delete(path, onSuccess = undefined, onFail = undefined) {
 }
 
 // Uploads the surface as a painting. onSuccess(file) and onFail(error) as for sb_file_upload.
-function painting_upload(surface, title, path, onSuccess, onFail) {
+function painting_upload(surface, title, description, path, onSuccess, onFail) {
 	var job = {
-		buffer: painting_encode(surface, title),
+		buffer: painting_encode(surface, title, description),
 		path: path,
 		onSuccess: onSuccess,
 		onFail: onFail,

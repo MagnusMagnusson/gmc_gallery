@@ -9,6 +9,7 @@ if(!is_undefined(shown)){
 	draw_sprite_stretched(shown.sprite, 0, 0, 0, w, h);
 	surface_reset_target();
 	canvas.save();
+	canvas.forget_history();
 }
 
 painting = false;

@@ -5,6 +5,8 @@ if(viewing){
 	draw_set_font(fnt_paint_ui_label);
 	draw_set_colour(c_dkgray);
 	draw_text(x, y + title_h + 6, "by " + shown.author);
+	draw_set_colour(c_black);
+	draw_text_ext(x, about_y, shown.description, -1, width);
 	ui_button(x, leave_y, x + width, leave_y + button_h, "Leave", false);
 	draw_set_colour(c_white);
 	exit;
@@ -37,6 +39,10 @@ if (title == "" && !editing) {
 	draw_text(x + 8, field_y + field_h / 2, _text);
 }
 draw_set_valign(fa_top);
+
+// The description field draws itself below this label.
+draw_set_colour(c_black);
+draw_text(x, about_label_y, "About");
 
 ui_button(x, save_y, x + width, save_y + button_h, saving ? "Saving..." : "Save", false);
 ui_button(x, leave_y, x + width, leave_y + button_h, leave_confirm ? "Leave anyway" : "Leave", false);

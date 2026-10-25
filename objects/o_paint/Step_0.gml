@@ -29,6 +29,19 @@ if (_click && point_in_box(mouse_x, mouse_y, paper_button_x, paper_y, x + width,
 	with (o_canvas) canvas.paper = _paint.colour;
 }
 
-if (_click && point_in_box(mouse_x, mouse_y, x, clear_y, x + width, clear_y + button_h)) {
+// Z undoes, Y or Shift+Z redoes, so Ctrl+Z and Ctrl+Y work too. Not in the middle of a stroke.
+var _keys = !_paint.typing && !_paint.naming;
+var _z = _keys && keyboard_check_pressed(ord("Z"));
+var _undo = (_z && !keyboard_check(vk_shift))
+	|| (_click && point_in_box(mouse_x, mouse_y, x, clear_y, x + third_w, clear_y + button_h));
+var _redo = (_z && keyboard_check(vk_shift)) || (_keys && keyboard_check_pressed(ord("Y")))
+	|| (_click && point_in_box(mouse_x, mouse_y, x + third_w + gap, clear_y, x + third_w * 2 + gap, clear_y + button_h));
+with (o_canvas) {
+	if (painting) break;
+	if (_undo) canvas.undo();
+	if (_redo) canvas.redo();
+}
+
+if (_click && point_in_box(mouse_x, mouse_y, x + width - third_w, clear_y, x + width, clear_y + button_h)) {
 	with (o_canvas) canvas.clear();
 }

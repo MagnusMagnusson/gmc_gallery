@@ -1,9 +1,12 @@
-// Title field, save and leave, to the right of the canvas.
+// Title and description fields, save and leave, to the right of the canvas.
 width = 230;
 field_h = 28;
 button_h = 32;
 field_y = y + 20;
-save_y = field_y + field_h + 12;
+about_label_y = field_y + field_h + 12;
+about_y = about_label_y + 20;
+about_h = 150;
+save_y = about_y + about_h + 12;
 leave_y = save_y + button_h + 6;
 delete_y = leave_y + button_h + 6;
 status_y = delete_y + button_h + 12;
@@ -19,10 +22,23 @@ viewing = !is_undefined(shown) && !mine;
 if(viewing){
 	draw_set_font(fnt_speech);
 	title_h = string_height_ext(shown.title, -1, width);
-	leave_y = y + title_h + 34;
+	about_y = y + title_h + 34;
+	draw_set_font(fnt_paint_ui_label);
+	leave_y = about_y + (shown.description == "" ? 0 : string_height_ext(shown.description, -1, width) + 12);
 }
 
 title = mine ? shown.title : "";
+
+about = undefined;
+saved_description = mine ? shown.description : "";
+if(!viewing){
+	about = instance_create_depth(x, about_y, depth - 1, o_text_handler);
+	about.width = width;
+	about.height = about_h;
+	about.max_length = PAINTING_DESCRIPTION_MAX;
+	about.placeholder = "Say something about your painting";
+	about.set_text(saved_description);
+}
 editing = false;
 // The first step of editing claims keyboard_string back from the hex field, which may have
 // rewritten it on the same step.
@@ -38,7 +54,8 @@ saved_path = mine ? shown.file.path : undefined;
 saved_edits = instance_exists(o_canvas) ? o_canvas.canvas.edits : 0;
 
 unsaved = function() {
-	return instance_exists(o_canvas) && o_canvas.canvas.edits != saved_edits;
+	return (instance_exists(o_canvas) && o_canvas.canvas.edits != saved_edits)
+		|| (!is_undefined(about) && string_trim(about.text) != saved_description);
 };
 
 save = function() {
@@ -58,12 +75,13 @@ save = function() {
 
 	var _canvas = o_canvas.canvas;
 	// The callbacks can arrive after this instance has left the room.
-	var _job = { owner: id, edits: _canvas.edits, path: saved_path ?? painting_new_path() };
+	var _job = { owner: id, edits: _canvas.edits, description: string_trim(about.text), path: saved_path ?? painting_new_path() };
 	_job.on_success = method(_job, function(_file) {
 		if (!instance_exists(owner)) return;
 		owner.saving = false;
 		owner.saved_path = path;
 		owner.saved_edits = edits;
+		owner.saved_description = description;
 		owner.status = "Saved! It will hang in the gallery.";
 	});
 	_job.on_fail = method(_job, function(_error) {
@@ -71,7 +89,7 @@ save = function() {
 		owner.saving = false;
 		owner.status = "Couldn't save: " + string(_error.message);
 	});
-	painting_upload(_canvas.get_surface(), _title, _job.path, _job.on_success, _job.on_fail);
+	painting_upload(_canvas.get_surface(), _title, _job.description, _job.path, _job.on_success, _job.on_fail);
 };
 
 remove = function() {
