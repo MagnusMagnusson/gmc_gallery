@@ -1,0 +1,1 @@
+goto = rm_hallway;
