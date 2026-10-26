@@ -24,12 +24,6 @@ draw_text(x + sprite_width / 2, y + 172, dpass);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 
-draw_set_color(c_red);
-for(var i = 0; i < array_length(zones); i++){
-	var zone = zones[i];
-	draw_rectangle(x + zone.x0, y + zone.y0, x + zone.x1, y + zone.y1, true);
-}
-
 draw_set_color(c_purple);
 var registerZone = zones[2];
 draw_rectangle(x+registerZone.x0, y+registerZone.y0, x+registerZone.x1, y+registerZone.y1, false);

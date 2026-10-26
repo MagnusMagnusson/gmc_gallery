@@ -81,7 +81,7 @@ onRegister =  method(self, function(e){
 
 onRegisterFailed =  method(self, function(e){
 	show_debug_message(e);
-	speech_say("I'm afraid that didn't work. Try again later, or with a different name", 1, 10);
+	speech_say(e.message, 1, 10);
 });
 clicks = 2;
 
