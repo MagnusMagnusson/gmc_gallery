@@ -83,6 +83,7 @@ save = function() {
 		owner.saved_edits = edits;
 		owner.saved_description = description;
 		owner.status = "Saved! It will hang in the gallery.";
+		jam60_achievement_complete("bohem");
 	});
 	_job.on_fail = method(_job, function(_error) {
 		if (!instance_exists(owner)) return;

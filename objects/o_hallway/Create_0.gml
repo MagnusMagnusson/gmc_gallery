@@ -1,6 +1,7 @@
 if(!variable_instance_exists(id, "folder")) folder = PAINTING_FOLDER;
 if(!variable_instance_exists(id, "ordered")) ordered = false;
 if(!variable_instance_exists(id, "title")) title = "Hallway";
+if(!variable_instance_exists(id, "can_paint")) can_paint = true;
 
 slots = hallway_slots();
 capacity = array_length(slots);

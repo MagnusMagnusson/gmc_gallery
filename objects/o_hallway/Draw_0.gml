@@ -1,4 +1,4 @@
-draw_self();
+if(can_paint) draw_self();
 if(hallway_count > 1){
 	draw_set_font(fnt_speech);
 	draw_set_halign(fa_center);

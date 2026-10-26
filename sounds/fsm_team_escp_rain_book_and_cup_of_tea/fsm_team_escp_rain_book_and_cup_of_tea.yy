@@ -22,5 +22,5 @@
   "resourceVersion":"2.0",
   "sampleRate":44100,
   "soundFile":"fsm_team_escp_rain_book_and_cup_of_tea.wav",
-  "volume":0.4,
+  "volume":0.25,
 }

@@ -31,6 +31,8 @@ hit = function(){
 		start_time = current_time;
 	} else {
 		egg_submit_small(stage, elapsed());
+		var achievements = ["egg", "egg_egg", "egg_egg_egg"];
+		jam60_achievement_complete(achievements[stage - 1]);
 	}
 	stage++;
 	audio_play_sound(snd_egg, 1, false);

@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"narr_egg_hall",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":3,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":53.206234,
+  "exportDir":"",
+  "name":"narr_egg_hall",
+  "parent":{
+    "name":"narrations",
+    "path":"folders/narration/narrations.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"narr_egg_hall.wav",
+  "volume":1.0,
+}

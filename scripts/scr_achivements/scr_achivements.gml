@@ -1,4 +1,4 @@
-#macro JAM60_ACHIEVEMENTS_GAME "*insert your game title here; the title should be alphanumeric + underscores only*"
+#macro JAM60_ACHIEVEMENTS_GAME "gmc_gallery"
 
 /// @desc Checks whether the given achievement is completed.
 /// @arg {String} game          The title of the game the achievement is for. Should be alphanumeric + underscores only.

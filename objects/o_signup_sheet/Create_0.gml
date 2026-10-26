@@ -67,6 +67,7 @@ onLogin = method(self, function(e){
 	speech_dismiss_all();
 	speech_say("Welcome back, and enjoy your visit", 0, 10);
 	instance_create_layer(0,0,  layer_get_id("Instances"), o_logged_in);
+	instance_destroy(self);
 });
 
 onLoginFailed =  method(self, function(e){
@@ -77,6 +78,7 @@ onRegister =  method(self, function(e){
 	speech_dismiss_all();
 	speech_say("Your ticket is ready. Enjoy your visit!",  0, 10);
 	instance_create_layer(0,0,  layer_get_id("Instances"), o_logged_in);
+	instance_destroy(self);
 });
 
 onRegisterFailed =  method(self, function(e){

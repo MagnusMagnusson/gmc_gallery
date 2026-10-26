@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"narr_main_hall",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":3,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":36.998707,
+  "exportDir":"",
+  "name":"narr_main_hall",
+  "parent":{
+    "name":"narrations",
+    "path":"folders/narration/narrations.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"narr_main_hall.wav",
+  "volume":1.0,
+}

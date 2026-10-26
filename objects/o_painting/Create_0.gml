@@ -9,6 +9,7 @@ title = painting.title;
 author = painting.author;
 label = string(@"'{0}'
 by {1}", title, author);
+x += 64;
 /*
 { 
 	file : 

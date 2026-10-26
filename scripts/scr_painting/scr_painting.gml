@@ -3,6 +3,8 @@
 
 #macro PAINTING_FOLDER "/paintings"
 #macro MEMORIES_FOLDER "/memories"
+// The only player who may hang new works in the memory room.
+#macro MEMORIES_CURATOR "mr_magnus"
 #macro PAINTING_EXT ".painting"
 #macro PAINTING_TITLE_MAX 40
 #macro PAINTING_DESCRIPTION_MAX 280
@@ -14,7 +16,10 @@
 // How long a folder listing is trusted, in milliseconds.
 #macro PAINTING_LIST_TTL 60000
 
-global.painting_folder_ready = false;
+// Folders known to exist, by path.
+global.painting_folder_ready = {};
+// Where a new painting is saved: the folder of the room the canvas was opened from.
+global.painting_new_folder = PAINTING_FOLDER;
 // Folder listings by folder: { files, time }.
 global.painting_listings = {};
 global.painting_cache = undefined;
@@ -82,7 +87,7 @@ function painting_decode(buf, file = undefined) {
 // A name for a new painting's file. Saving again overwrites it.
 function painting_new_path() {
 	var now = floor((date_current_datetime() - date_create_datetime(1970, 1, 1, 0, 0, 0)) * 86400);
-	return PAINTING_FOLDER + "/" + string(sb_player().id) + "_" + string(now) + "_" + string(irandom(9999)) + PAINTING_EXT;
+	return global.painting_new_folder + "/" + string(sb_player().id) + "_" + string(now) + "_" + string(irandom(9999)) + PAINTING_EXT;
 }
 
 // Whether the signed-in player made this painting. Who may actually delete is up to the
@@ -112,20 +117,21 @@ function painting_upload(surface, title, description, path, onSuccess, onFail) {
 	var job = {
 		buffer: painting_encode(surface, title, description),
 		path: path,
+		folder: painting_folder_of(path),
 		onSuccess: onSuccess,
 		onFail: onFail,
 	};
 	job.upload = method(job, function() {
-		global.painting_folder_ready = true;
+		global.painting_folder_ready[$ folder] = true;
 		sb_file_upload(scoreboat_bucket_painting, path, buffer, { content_type: "application/x-gmc-painting" }, onSuccess, onFail).success(painting_listing_forget);
 		buffer_delete(buffer);
 	});
 
-	if (global.painting_folder_ready) {
+	if (global.painting_folder_ready[$ job.folder] ?? false) {
 		job.upload();
 	} else {
 		// Fails with 409 once the folder exists, which is just as good.
-		sb_folder_create(scoreboat_bucket_painting, PAINTING_FOLDER, job.upload, job.upload);
+		sb_folder_create(scoreboat_bucket_painting, job.folder, job.upload, job.upload);
 	}
 }
 
