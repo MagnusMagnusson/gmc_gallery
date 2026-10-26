@@ -5,16 +5,24 @@
 #macro HALLWAY_CELL_H 135
 #macro HALLWAY_WALL_H 450
 
-// Which hallway is being visited, from 0. Kept while away painting.
-global.hallway_index = 0;
+// Which hallway is being visited in each folder, from 0. Kept while away painting.
+global.hallway_index = {};
+
+function hallway_index_get(folder){
+	return global.hallway_index[$ folder] ?? 0;
+}
+
+function hallway_index_set(folder, index){
+	global.hallway_index[$ folder] = index;
+}
 
 // The top left corner of every spot on the wall a painting can hang.
 function hallway_slots(){
 	var cols = floor((room_width - HALLWAY_CELL_W) / HALLWAY_CELL_W);
 	var rows = floor(HALLWAY_WALL_H / HALLWAY_CELL_H);
 	var slots = [];
-	for(var c = 0; c <= cols; c++){
-		for(var r = 0; r <= rows; r++){
+	for(var r = 0; r <= rows; r++){
+		for(var c = 0; c <= cols; c++){
 			array_push(slots, { x: c * HALLWAY_CELL_W, y: r * HALLWAY_CELL_H });
 		}
 	}
@@ -31,8 +39,16 @@ function hallway_of(index, capacity){
 global.hallway_spots = {};
 
 // Gives every painting in files a spot in the hallway. Paintings that already hang there keep
-// theirs; the rest get a random free one.
-function hallway_place(files, hallway, capacity){
+// theirs; the rest get a random free one. Ordered, they hang in the order given instead,
+// left to right and top to bottom.
+function hallway_place(files, hallway, capacity, ordered = false){
+	if(ordered){
+		for(var i = 0; i < array_length(files); i++){
+			global.hallway_spots[$ files[i].id] = { hallway: hallway, slot: i };
+		}
+		return;
+	}
+
 	var taken = array_create(capacity, false);
 	var unplaced = [];
 	for(var i = 0; i < array_length(files); i++){

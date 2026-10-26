@@ -11,8 +11,8 @@ leave_y = save_y + button_h + 6;
 delete_y = leave_y + button_h + 6;
 status_y = delete_y + button_h + 12;
 
-// Where Leave goes. The gallery hallway, once there is one.
-leave_to = rm_hallway;
+// Where Leave goes: the room the painting was picked from.
+leave_to = global.painting_return_room;
 
 // Looking at someone else's painting from the gallery: its title and author instead of the
 // title field, and no saving. One's own paintings open for editing instead.

@@ -2,6 +2,7 @@
 // PNG rather than raw surface bytes, so a painting saved on a Mac reads the same on Windows.
 
 #macro PAINTING_FOLDER "/paintings"
+#macro MEMORIES_FOLDER "/memories"
 #macro PAINTING_EXT ".painting"
 #macro PAINTING_TITLE_MAX 40
 #macro PAINTING_DESCRIPTION_MAX 280
@@ -14,13 +15,15 @@
 #macro PAINTING_LIST_TTL 60000
 
 global.painting_folder_ready = false;
-global.painting_listing = undefined;
-global.painting_listing_time = 0;
+// Folder listings by folder: { files, time }.
+global.painting_listings = {};
 global.painting_cache = undefined;
 // Paintings decoded this run, by file id. Their sprites belong here: don't sprite_delete them.
 global.painting_loaded = {};
 // The painting the canvas room shows instead of a blank canvas, or undefined to paint a new one.
 global.viewing_painting = undefined;
+// Where the canvas room's Leave goes back to: the room the painting was picked from.
+global.painting_return_room = rm_hallway;
 
 function painting_encode(surface, title, description) {
 	var tmp = "painting_save.png";
@@ -92,7 +95,11 @@ function painting_is_mine(painting) {
 
 // So the next fetch lists the folder again, and sees what was just saved or deleted.
 function painting_listing_forget() {
-	global.painting_listing = undefined;
+	global.painting_listings = {};
+}
+
+function painting_folder_of(path) {
+	return string_copy(path, 1, string_last_pos("/", path) - 1);
 }
 
 // onSuccess(result) and onFail(error) as for sb_file_delete.
@@ -123,16 +130,17 @@ function painting_upload(surface, title, description, path, onSuccess, onFail) {
 }
 
 // Every painting file in the folder, across all pages. onDone(files) gets the files as
-// sb_file_list describes them. Uses the last listing if it's less than a minute old.
-function paintings_list(onDone, onFail = undefined) {
-	if (!is_undefined(global.painting_listing) && current_time - global.painting_listing_time < PAINTING_LIST_TTL) {
-		onDone(global.painting_listing);
+// sb_file_list describes them, oldest first. Uses the last listing if it's less than a minute old.
+function paintings_list(onDone, onFail = undefined, folder = PAINTING_FOLDER) {
+	var cached = global.painting_listings[$ folder];
+	if (!is_undefined(cached) && current_time - cached.time < PAINTING_LIST_TTL) {
+		onDone(cached.files);
 		return;
 	}
 
-	var job = { files: [], offset: 0, onDone: onDone, onFail: onFail };
+	var job = { files: [], offset: 0, onDone: onDone, onFail: onFail, folder: folder };
 	job.nextPage = method(job, function() {
-		sb_file_list(scoreboat_bucket_painting, PAINTING_FOLDER, { limit: 200, offset: offset }, onListed, onFail);
+		sb_file_list(scoreboat_bucket_painting, folder, { limit: 200, offset: offset }, onListed, onFail);
 	});
 	job.onListed = method(job, function(listing) {
 		var page = listing[$ "files"] ?? [];
@@ -151,9 +159,8 @@ function paintings_list(onDone, onFail = undefined) {
 			if(ca != cb) return ca < cb ? -1 : 1;
 			return a.path < b.path ? -1 : (a.path > b.path ? 1 : 0);
 		});
-		global.painting_listing = files;
-		global.painting_listing_time = current_time;
-		painting_cache_prune(files);
+		global.painting_listings[$ folder] = { files: files, time: current_time };
+		painting_cache_prune(files, folder);
 		onDone(files);
 	});
 	job.nextPage();
@@ -262,7 +269,7 @@ function painting_cache_write(file, buf) {
 	if (!directory_exists(PAINTING_CACHE_DIR)) directory_create(PAINTING_CACHE_DIR);
 	buffer_save(buf, painting_cache_path(file.id));
 	var index = painting_cache_index();
-	index[$ file.id] = { updated: file.updated, size: file.size };
+	index[$ file.id] = { updated: file.updated, size: file.size, folder: painting_folder_of(file.path) };
 	painting_cache_save_index();
 }
 
@@ -274,9 +281,10 @@ function painting_cache_forget(file_id) {
 	painting_cache_save_index();
 }
 
-// Drops whatever is no longer in the folder, from disk and memory.
+// Drops whatever is no longer in the folder, from disk and memory. Paintings from other folders
+// are left alone. Cache entries from before folders were recorded are from PAINTING_FOLDER.
 /// @ignore
-function painting_cache_prune(files) {
+function painting_cache_prune(files, folder) {
 	var keep = {};
 	for (var i = 0; i < array_length(files); i++) keep[$ files[i].id] = true;
 
@@ -285,6 +293,7 @@ function painting_cache_prune(files) {
 	var changed = false;
 	for (var i = 0; i < array_length(ids); i++) {
 		if (struct_exists(keep, ids[i])) continue;
+		if ((index[$ ids[i]][$ "folder"] ?? PAINTING_FOLDER) != folder) continue;
 		if (file_exists(painting_cache_path(ids[i]))) file_delete(painting_cache_path(ids[i]));
 		struct_remove(index, ids[i]);
 		changed = true;
@@ -294,6 +303,7 @@ function painting_cache_prune(files) {
 	var loaded = struct_get_names(global.painting_loaded);
 	for (var i = 0; i < array_length(loaded); i++) {
 		if (struct_exists(keep, loaded[i])) continue;
+		if (painting_folder_of(global.painting_loaded[$ loaded[i]].file.path) != folder) continue;
 		sprite_delete(global.painting_loaded[$ loaded[i]].sprite);
 		struct_remove(global.painting_loaded, loaded[i]);
 	}

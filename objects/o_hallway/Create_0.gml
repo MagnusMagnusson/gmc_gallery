@@ -1,6 +1,11 @@
+if(!variable_instance_exists(id, "folder")) folder = PAINTING_FOLDER;
+if(!variable_instance_exists(id, "ordered")) ordered = false;
+if(!variable_instance_exists(id, "title")) title = "Hallway";
+
 slots = hallway_slots();
 capacity = array_length(slots);
 hallway_count = 1;
+index = 0;
 
 placePainting = method(self, function(painting, cached){
 	var spot = global.hallway_spots[$ painting.file.id];
@@ -14,22 +19,23 @@ placePainting = method(self, function(painting, cached){
 
 hang = method(self, function(files){
 	hallway_count = max(1, hallway_of(array_length(files) - 1, capacity) + 1);
-	global.hallway_index = clamp(global.hallway_index, 0, hallway_count - 1);
+	index = clamp(hallway_index_get(folder), 0, hallway_count - 1);
+	hallway_index_set(folder, index);
 	var here = [];
 	for(var i = 0; i < array_length(files); i++){
-		if(hallway_of(i, capacity) == global.hallway_index) array_push(here, files[i]);
+		if(hallway_of(i, capacity) == index) array_push(here, files[i]);
 	}
 	// Spots are handed out before anything loads, so a painting that arrives first can't take
 	// the spot of one that hung there last time.
-	hallway_place(here, global.hallway_index, capacity);
+	hallway_place(here, index, capacity, ordered);
 	for(var i = 0; i < array_length(here); i++){
 		painting_get(here[i], loader.onPaintingLoad);
 	}
-	if(global.hallway_index > 0){
-		instance_create_layer(250, 690, "Instances", o_hallway_arrow, { dir: -1 });
+	if(index > 0){
+		instance_create_layer(250, 690, "Instances", o_hallway_arrow, { dir: -1, folder: folder });
 	}
-	if(global.hallway_index < hallway_count-1){
-		instance_create_layer(room_width - 80, 690, "Instances", o_hallway_arrow, { dir: 1 });
+	if(index < hallway_count-1){
+		instance_create_layer(room_width - 80, 690, "Instances", o_hallway_arrow, { dir: 1, folder: folder });
 	}
 });
 
@@ -46,4 +52,4 @@ loader.onListed = method(loader, function(files){
 	owner.hang(files);
 });
 
-paintings_list(loader.onListed);
+paintings_list(loader.onListed, undefined, folder);
