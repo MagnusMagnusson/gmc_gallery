@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"fsm_team_escp_rain_book_and_cup_of_tea",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":3,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":177.16054,
+  "exportDir":"",
+  "name":"fsm_team_escp_rain_book_and_cup_of_tea",
+  "parent":{
+    "name":"gmc_gallery",
+    "path":"gmc_gallery.yyp",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"fsm_team_escp_rain_book_and_cup_of_tea.wav",
+  "volume":0.4,
+}

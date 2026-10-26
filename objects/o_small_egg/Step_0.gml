@@ -1,8 +1,14 @@
 if(!finished()){
+	if(shaking){
+		shaking--;
+		x = xstart + shaking * (shaking%2 == 0 ? -1 : 1);
+	}
+
 	image_index = min(floor(hits/life * image_number), image_number - 1);
 	hover = false;
 	exit;
 }
+
 
 draw_set_font(fnt_EGG);
 var w = string_width("reset")/2;

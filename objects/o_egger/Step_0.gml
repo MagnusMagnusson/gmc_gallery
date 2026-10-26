@@ -11,6 +11,7 @@ if(keyboard_lastchar != ""){
 			with(o_small_egg) hit();
 			with(o_big_egg) hit();
 			getNextWord();
+			audio_play_sound(snd_thumo, 2, false);
 		}
 	}
 }

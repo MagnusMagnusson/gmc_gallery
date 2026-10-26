@@ -2,6 +2,7 @@
 egg_lives = [1, 3, 10, 100];
 image_speed = 0;
 hover = false;
+shaking = 0;
 
 restart = function(){
 	stage = 0;
@@ -22,6 +23,7 @@ elapsed = function(){
 hit = function(){
 	if(finished()) return;
 	hits++;
+	shaking = 30;
 	if(hits < life) return;
 
 	instance_create_depth(x + sprite_width/2, y + sprite_height/2, depth - 1, o_yolk);
@@ -31,6 +33,7 @@ hit = function(){
 		egg_submit_small(stage, elapsed());
 	}
 	stage++;
+	audio_play_sound(snd_egg, 1, false);
 	hits = 0;
 	if(!finished()) life = egg_lives[stage];
 }

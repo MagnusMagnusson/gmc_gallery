@@ -9,6 +9,7 @@ remaining = life;
 broken = false;
 flush_timer = 0;
 refresh_timer = 0;
+shaking = 0;
 
 recount = function(){
 	remaining = max(0, life - hits - pending - sending);
@@ -34,6 +35,7 @@ applyRecord = function(record){
 hit = function(){
 	if(broken) return;
 	pending++;
+	shaking = 30;
 	recount();
 }
 
